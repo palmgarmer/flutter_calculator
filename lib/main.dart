@@ -51,6 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final evaluator = const ExpressionEvaluator();
 
   void _calculator(String text) {
+    if (text == '0' && _resultController.text == '0') {
+      return;
+    } else if (text == '.' && _resultController.text.contains('.')) {
+      return;
+    }
     if (text == 'c') {
       text = '';
     } else if (text == '+/-') {
@@ -81,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         text = result.toString();
         _hasCalculated = true;
       } catch (e) {
-        text = _resultController.text
+          text = _resultController.text
             .substring(0, _resultController.text.length - 1);
         _hasCalculated = true;
       }
