@@ -1,0 +1,1 @@
+ /Users/pgms/Documents/GitHub/flutter_calculator/.dart_tool/flutter_build/8997479423ce23de31fc20f32799045b/native_assets.yaml: 
