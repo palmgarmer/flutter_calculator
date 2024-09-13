@@ -61,14 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } else if (text == '%') {
       text = _resultController.text + '/100';
+      _hasCalculated = false;
     } else if (text == '×') {
       text = _resultController.text + '*';
+      _hasCalculated = false;
     } else if (text == '÷') {
       text = _resultController.text + '/';
+      _hasCalculated = false;
     } else if (text == '+') {
       text = _resultController.text + '+';
+      _hasCalculated = false;
     } else if (text == '-') {
       text = _resultController.text + '-';
+      _hasCalculated = false;
     } else if (text == '=') {
       try {
         final expression = Expression.parse(_resultController.text);
@@ -76,7 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
         text = result.toString();
         _hasCalculated = true;
       } catch (e) {
-        text = 'Error';
+        text = _resultController.text
+            .substring(0, _resultController.text.length - 1);
         _hasCalculated = true;
       }
     } else {
