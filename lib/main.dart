@@ -47,32 +47,49 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _resultController = TextEditingController();
+  bool _hasCalculated = false;
   final evaluator = const ExpressionEvaluator();
 
   void _calculator(String text) {
-    setState(() {
-      if (text == 'c') {
-        _resultController.clear();
-      } else if (text == '+/-') {
-        if (_resultController.text.isNotEmpty) {
-          if (_resultController.text.startsWith('-')) {
-            _resultController.text = _resultController.text.substring(1);
-          } else {
-            _resultController.text = '-${_resultController.text}';
-          }
-        }
-      } else if (text == '=') {
-        try {
-          final expression = Expression.parse(
-              _resultController.text.replaceAll('×', '*').replaceAll('÷', '/'));
-          final result = evaluator.eval(expression, {});
-          _resultController.text = result.toString();
-        } catch (e) {
-          _resultController.text = 'Error';
-        }
+    if (text == 'c') {
+      text = '';
+    } else if (text == '+/-') {
+      if (_resultController.text.startsWith('-')) {
+        text = _resultController.text.substring(1);
       } else {
-        _resultController.text += text;
+        text = '-' + _resultController.text;
       }
+    } else if (text == '%') {
+      text = _resultController.text + '/100';
+    } else if (text == '×') {
+      text = _resultController.text + '*';
+    } else if (text == '÷') {
+      text = _resultController.text + '/';
+    } else if (text == '+') {
+      text = _resultController.text + '+';
+    } else if (text == '-') {
+      text = _resultController.text + '-';
+    } else if (text == '=') {
+      try {
+        final expression = Expression.parse(_resultController.text);
+        final result = evaluator.eval(expression, {});
+        text = result.toString();
+        _hasCalculated = true;
+      } catch (e) {
+        text = 'Error';
+        _hasCalculated = true;
+      }
+    } else {
+      if (_hasCalculated) {
+        _hasCalculated = false;
+        _resultController.text = text;
+      } else {
+        text = _resultController.text + text;
+      }
+    }
+
+    setState(() {
+      _resultController.text = text;
     });
   }
 
@@ -221,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: _buildButton(context, '6'),
                   ),
                   Expanded(
-                    child: _buildButton(context, '+'),
+                    child: _buildButton(context, '-'),
                   ),
                 ],
               ),
@@ -242,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: _buildButton(context, '3'),
                   ),
                   Expanded(
-                    child: _buildButton(context, '-'),
+                    child: _buildButton(context, '+'),
                   ),
                 ],
               ),
